@@ -33,17 +33,15 @@ namespace examples.MultiThreading
         public static void Main(string[] args)
         {
             var eventLoop = new EventLoop();
+            eventLoop.OnStoped(() =>
+            {
+                Environment.Exit(0);
+            });
 
             var inputThread = NewInputThread();
             inputThread.Start();
 
             eventLoop.Start();
-
-            // this fragment will no be executed
-            eventLoop.Async(() =>
-            {
-                Console.WriteLine("Finished");
-            });
         }
 
         private static Thread NewInputThread()
@@ -76,7 +74,8 @@ namespace examples.MultiThreading
             {"how are you?", "I'm fine, thank you, how about you?"},
             {"i'm fine", "Look good, how do you feel?"},
             {"bad", "Do you want to drink some think?"},
-            {"yes, drink", "Beer or tear?"}
+            {"yes, drink", "Beer or tear?"},
+            {"quit", "Bye"}
         };
 
         private static readonly Bot INSTANCE = new Bot();
@@ -118,6 +117,10 @@ namespace examples.MultiThreading
             {
                 ChatBotGraphic.GetInstance().Render(answer);
             });
+            if (questionLowercase == "quit")
+            {
+                NonBlockingQueue.GetInstance().AddTask(EventLoop.POISON);
+            }
         }
     }
 }

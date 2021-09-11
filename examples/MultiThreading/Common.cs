@@ -44,8 +44,10 @@ namespace examples
     {
         private readonly string ThreadName;
         private Runnable UpdateCallback;
+        private Runnable StoppedCallback;
         private const int DAFAUT_SLEEP_TIME = 16;
         public const string MAIN_THREAD_NAME = "main";
+        public static readonly Runnable POISON = () => { };
 
         public EventLoop(string threadName = MAIN_THREAD_NAME)
         {
@@ -68,6 +70,14 @@ namespace examples
                 {
                     try
                     {
+                        if(task == POISON)
+                        {
+                            if(StoppedCallback != null)
+                            {
+                                StoppedCallback();
+                            }
+                            return;
+                        };
                         task();
                     }
                     catch (Exception e)
@@ -104,6 +114,16 @@ namespace examples
         public void OnUpdated(Runnable callback)
         {
             UpdateCallback = callback;
+        }
+
+        private void Stop()
+        {
+            NonBlockingQueue.GetInstance().AddTask(POISON);
+        }
+
+        public void OnStoped(Runnable callback)
+        {
+            StoppedCallback = callback;
         }
     }
 }
