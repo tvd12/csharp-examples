@@ -42,14 +42,25 @@ namespace examples
 
     public class EventLoop
     {
+        private readonly string ThreadName;
         private Runnable UpdateCallback;
         private const int DAFAUT_SLEEP_TIME = 16;
+        public const string MAIN_THREAD_NAME = "main";
+
+        public EventLoop(string threadName = MAIN_THREAD_NAME)
+        {
+            this.ThreadName = threadName;
+        }
 
         public void Start(int defaultSleepTime = DAFAUT_SLEEP_TIME)
         {
             var buffer = new List<Runnable>();
             while (true)
             {
+                if(string.IsNullOrEmpty(Thread.CurrentThread.Name))
+                {
+                    Thread.CurrentThread.Name = ThreadName;
+                }
                 var startTime = DateTime.Now;
                 buffer.Clear();
                 NonBlockingQueue.GetInstance().TakeTask(buffer);
@@ -83,7 +94,7 @@ namespace examples
         private void Update()
         {
             DoUpdate();
-            UpdateCallback();
+            UpdateCallback?.Invoke();
         }
 
         protected virtual void DoUpdate()

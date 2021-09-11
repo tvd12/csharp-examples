@@ -12,7 +12,7 @@ namespace examples
 
     public class GameClientProgram
     {
-        public static void Main(String[] args)
+        public static void Main3(String[] args)
         {
             EventLoop eventLoop = new GameClientEventLoop();
 

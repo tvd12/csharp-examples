@@ -12,6 +12,7 @@ Mục tiêu cuối cùng là giúp các thành viên có thể tự tạo ra đ�
 
 - Hiểu được cơ chế hoạt động của event loop: tham khảo các lớp EventLoop, NonBlockingQueue
 - Hiểu được cơ chế hoạt động của async await: tham khảo các lớp EventLoop, SingleThreadAsync
+- Hiểu được lý do tại sao phải sử dụng đã luồng: hiểu được lý do tại sao phải sử dụng đã luồng: Tham khảo lớp ChatBot
 - Hiểu được deadlock là gì
 - Hiểu được cơ chế hoạt động của synchronize và lock
 - Hiểu được cơ chế hoạt động của blocking queue
