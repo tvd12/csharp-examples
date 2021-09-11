@@ -31,6 +31,7 @@ Mục tiêu cuối cùng là giúp các thành viên hiểu được các thức
 
 - Hiểu được TCP là gì và cách lập trình với nó
 - Hiểu được UDP là gì và cách lập trình với nó
+- Maintain được [EzyFox Server CSharp client SDK](https://github.com/youngmonkeys/ezyfox-server-csharp-client)
 
 # Contact us
 
