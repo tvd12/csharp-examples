@@ -41,6 +41,11 @@ namespace examples.MultiThreading
             }
         }
 
+        public void Execute(Runnable task)
+        {
+            Tasks.offer(task);
+        }
+
         public void Stop()
         {
             Tasks.offer(POISON);
@@ -56,22 +61,15 @@ namespace examples.MultiThreading
     {
         private readonly string ThreadName;
         private readonly int MinThreads;
-        private readonly int MaxThreads;
         private readonly EzySynchronizedQueue<ThreadWrapper> Threads;
-        private readonly EzyBlockingQueue<Runnable> Tasks;
         private readonly AtomicLong ThreadCount;
-        private readonly AtomicInteger RunningThreadCount;
-        public static readonly Runnable POISON = () => { };
 
-        public ThreadPool(string threadName, int minThreads, int maxThreads)
+        public ThreadPool(string threadName, int minThreads)
         {
             this.ThreadName = threadName;
             this.MinThreads = minThreads;
-            this.MaxThreads = maxThreads;
             this.ThreadCount = new AtomicLong();
-            this.RunningThreadCount = new AtomicInteger();
-            this.Tasks = new EzyBlockingQueue<Runnable>();
-            this.Threads = new EzySynchronizedQueue<Thread>();
+            this.Threads = new EzySynchronizedQueue<ThreadWrapper>();
             this.AddMinThreads();
         }
 
@@ -83,56 +81,30 @@ namespace examples.MultiThreading
             }
         }
 
-        private Thread NewThread()
+        private ThreadWrapper NewThread()
         {
             var threadName = ThreadName + "-" + ThreadCount.incrementAndGet();
-            var newThread = new Thread(Loop);
-            newThread.Name = threadName;
+            var newThread = new ThreadWrapper(threadName);
             newThread.Start();
             return newThread;
         }
 
-        private void Loop()
-        {
-            while(true)
-            {
-                var currentTask = Tasks.take();
-                int currentRunningThreadCount = RunningThreadCount.incrementAndGet();
-                if(!Tasks.isEmpty() &&
-                    currentRunningThreadCount >= Threads.size() &&
-                    currentRunningThreadCount < MaxThreads)
-                {
-                    Threads.offer(NewThread());
-                }
-                if(currentTask == POISON)
-                {
-                    break;
-                }
-                try
-                {
-                    currentTask();
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine("handle task failed", e);
-                }
-                finally
-                {
-                    RunningThreadCount.decrementAndGet();
-                }
-            }
-        }
-
         public void Execute(Runnable task)
         {
-            Tasks.offer(task);
+            lock(Threads)
+            {
+                var currentThread = Threads.poll();
+                Threads.offer(currentThread);
+                currentThread.Execute(task);
+            }
         }
 
         public void Shutdown()
         {
-            for(int i = 0; i < Threads.size(); ++i)
+            while (!Threads.isEmpty())
             {
-                Tasks.add(POISON);
+                var thread = Threads.poll();
+                thread.StopNow();
             }
         }
 
@@ -141,7 +113,7 @@ namespace examples.MultiThreading
             while(!Threads.isEmpty())
             {
                 var thread = Threads.poll();
-                thread.Abort();
+                thread.StopNow();
             }
         }
     }
