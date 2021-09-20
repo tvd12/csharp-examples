@@ -7,8 +7,12 @@
 
   <ItemGroup>
     <None Remove="MultiThreading\" />
+    <None Remove="Util\" />
+    <None Remove="Concurrent\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="MultiThreading\" />
+    <Folder Include="Util\" />
+    <Folder Include="Concurrent\" />
   </ItemGroup>
 </Project>

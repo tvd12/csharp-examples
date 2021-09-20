@@ -30,7 +30,7 @@ namespace examples.MultiThreading
 
     public class ChatBot
     {
-        public static void Main(string[] args)
+        public static void MainX(string[] args)
         {
             var eventLoop = new EventLoop();
             eventLoop.OnStoped(() =>

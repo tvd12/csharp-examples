@@ -12,13 +12,13 @@ Mục tiêu cuối cùng là giúp các thành viên có thể tự tạo ra đ�
 
 - Hiểu được cơ chế hoạt động của event loop: tham khảo các lớp EventLoop, NonBlockingQueue
 - Hiểu được cơ chế hoạt động của async await: tham khảo các lớp EventLoop, SingleThreadAsync
-- Hiểu được lý do tại sao phải sử dụng đã luồng: hiểu được lý do tại sao phải sử dụng đã luồng: Tham khảo lớp ChatBot
+- Hiểu được lý do tại sao phải sử dụng đã luồng: hiểu được lý do tại sao phải sử dụng đã luồng: tham khảo lớp ChatBot
 - Hiểu được deadlock là gì
 - Hiểu được cơ chế hoạt động của synchronize và lock
-- Hiểu được cơ chế hoạt động của blocking queue
-- Hiểu được cơ chế hoạt động của thread pool
+- Hiểu được cơ chế hoạt động của blocking queue: tham khảo lớp: EzyBlockingQueue
+- Hiểu được cơ chế hoạt động của thread pool: tham khảo lớp: ExecutorService và ThreadPool
 - Hiểu được cơ chế hoạt động của các lớp core như Task
-- Hiểu được cách thức mà các thư viện đưa dữ liệu về main thread
+- Hiểu được cách thức mà các thư viện đưa dữ liệu về main thread: tham khảo lớp ChatBot
 - Tạo ra được các thư viện lập trình để xử lý đa luồng
 
 Các tài liệu tham khảo:
