@@ -17,7 +17,7 @@ Mục tiêu cuối cùng là giúp các thành viên có thể tự tạo ra đ�
 - Hiểu được cơ chế hoạt động của synchronize và lock
 - Hiểu được cơ chế hoạt động của blocking queue: tham khảo lớp: EzyBlockingQueue
 - Hiểu được cơ chế hoạt động của thread pool: tham khảo lớp: ExecutorService và ThreadPool
-- Hiểu được cơ chế hoạt động của các lớp core như Task
+- Hiểu được cơ chế hoạt động của các lớp core như Task: Tham khảo lớp Future, FutureManager và Task
 - Hiểu được cách thức mà các thư viện đưa dữ liệu về main thread: tham khảo lớp ChatBot
 - Tạo ra được các thư viện lập trình để xử lý đa luồng
 

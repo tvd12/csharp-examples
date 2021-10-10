@@ -6,6 +6,8 @@ namespace examples
 {
     public delegate void Runnable();
 
+    public delegate T Runnable<T>();
+
     public class NonBlockingQueue
     {
         private readonly Queue<Runnable> Tasks = new Queue<Runnable>();

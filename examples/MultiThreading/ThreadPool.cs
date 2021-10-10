@@ -120,7 +120,7 @@ namespace examples.MultiThreading
 
     public class ThreadPoolExample
     {
-        public static void Main(string[] args)
+        public static void MainX(string[] args)
         {
             var executorService = new ExecutorService("test", 3, 10);
             var numberOfTasks = 12;

@@ -10,10 +10,11 @@ namespace examples.MultiThreading
         private readonly int MinThreads;
         private readonly int MaxThreads;
         private readonly EzySynchronizedQueue<Thread> Threads;
-        private readonly EzyBlockingQueue<Runnable> Tasks;
+        private readonly EzyBlockingQueue<object> Tasks;
         private readonly AtomicLong ThreadCount;
         private readonly AtomicInteger RunningThreadCount;
-        public static readonly Runnable POISON = () => { };
+        private readonly FutureManager FutureManager;
+        public static readonly object POISON = new object();
 
         public ExecutorService(string threadName, int minThreads, int maxThreads)
         {
@@ -21,8 +22,9 @@ namespace examples.MultiThreading
             this.MinThreads = minThreads;
             this.MaxThreads = maxThreads;
             this.ThreadCount = new AtomicLong();
+            this.FutureManager = new FutureManager();
             this.RunningThreadCount = new AtomicInteger();
-            this.Tasks = new EzyBlockingQueue<Runnable>();
+            this.Tasks = new EzyBlockingQueue<object>();
             this.Threads = new EzySynchronizedQueue<Thread>();
             this.AddMinThreads();
         }
@@ -62,7 +64,31 @@ namespace examples.MultiThreading
                 }
                 try
                 {
-                    currentTask();
+                    if(currentTask is Runnable)
+                    {
+                        ((Runnable)currentTask)();
+                    }
+                    else
+                    {
+                        var taskT = ((Runnable<object>)currentTask);
+                        var future = FutureManager.RemoveFuture(taskT);
+                        try
+                        {
+                            var result = taskT();
+                            if (future != null)
+                            {
+                                future.Finish(result);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            if(future != null)
+                            {
+                                future.Finish(e);
+                            }
+                        }
+
+                    }
                 }
                 catch(Exception e)
                 {
@@ -78,6 +104,13 @@ namespace examples.MultiThreading
         public void Execute(Runnable task)
         {
             Tasks.offer(task);
+        }
+
+        public Future<T> Submit<T>(Runnable<object> task)
+        {
+            Future<T> future = FutureManager.AddNewFuture<T>(task);
+            Tasks.offer(task);
+            return future;
         }
 
         public void Shutdown()
