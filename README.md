@@ -23,8 +23,8 @@ Mục tiêu cuối cùng là giúp các thành viên có thể tự tạo ra đ�
 
 Các tài liệu tham khảo:
 
-- [Event Loop](https://tvd12.com/event-loop/)
-- [Asynchronous](https://tvd12.com/asynchronous/)
+- [Event Loop](https://tvd12.com/posts/event-loop)
+- [Asynchronous](https://tvd12.com/posts/asynchronous)
 
 ## 2. Lập trình socket
 
